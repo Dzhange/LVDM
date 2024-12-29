@@ -9,3 +9,5 @@ results/
 clip-vit-large-patch14
 results
 temp
+*.zarr
+src/
