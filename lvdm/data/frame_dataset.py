@@ -329,3 +329,85 @@ class VideoFrameDataset(data.Dataset):
 
     def __len__(self):
         return len(self.clips)
+
+
+if __name__ == "__main__":
+    # Example usage and inspection of the VideoFrameDataset
+    
+    # Configuration
+    # data_root = "/home/ubuntu/Robot/LVDM/datasets/UCF-101_split"  # Change this to your data directory
+    data_root = "/home/ubuntu/Robot/LVDM/datasets/sky_timelapse"  # Change this to your data directory
+    resolution = 256
+    video_length = 16
+    dataset_name = "sky"  # or "sky" depending on your dataset
+    # dataset_name = "UCF-101"  # or "sky" depending on your dataset
+    subset_split = "train"
+    
+    # Initialize dataset
+    dataset = VideoFrameDataset(
+        data_root=data_root,
+        resolution=resolution,
+        video_length=video_length,
+        dataset_name=dataset_name,
+        subset_split=subset_split,
+        spatial_transform="center_crop_resize",
+        temporal_transform="",
+        frame_stride=1
+    )
+    
+    # Print dataset information
+    print(f"\nDataset Information:")
+    print(f"Total number of clips: {len(dataset)}")
+    
+    # Get a sample from the dataset
+    sample_idx = 0
+    sample = dataset[sample_idx]
+    
+    print(f"\nSample {sample_idx} Information:")
+    print(f"Image tensor shape: {sample['image'].shape}")
+    print(f"Frame stride: {sample['frame_stride']}")
+    
+    if dataset_name == "UCF-101":
+        print(f"Caption: {sample['caption']}")
+        print(f"Class label: {sample['class_label']}")
+        print(f"Class name: {sample['class_name']}")
+    
+    # Create a simple data loader to test batch loading
+    from torch.utils.data import DataLoader
+    
+    batch_size = 4
+    dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
+    
+    # Get a batch
+    print(f"\nTesting DataLoader:")
+    for batch_idx, batch in enumerate(dataloader):
+        print(f"\nBatch {batch_idx} Information:")
+        print(f"Batch image tensor shape: {batch['image'].shape}")
+        
+        if dataset_name == "UCF-101":
+            print(f"Batch captions: {batch['caption']}")
+            print(f"Batch class labels: {batch['class_label']}")
+            print(f"Batch class names: {batch['class_name']}")
+        
+        # Only print first batch for demonstration
+        break
+
+    # Test different spatial transforms
+    print("\nTesting different spatial transforms:")
+    transforms_to_test = ["center_crop_resize", "resize", "random_crop"]
+    
+    for transform in transforms_to_test:
+        print(f"\nTesting {transform}:")
+        test_dataset = VideoFrameDataset(
+            data_root=data_root,
+            resolution=resolution,
+            video_length=video_length,
+            dataset_name=dataset_name,
+            subset_split=subset_split,
+            spatial_transform=transform,
+            temporal_transform="",
+            frame_stride=1
+        )
+        
+        test_sample = test_dataset[0]
+        print(f"Output shape with {transform}: {test_sample['image'].shape}")

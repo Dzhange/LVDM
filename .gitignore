@@ -8,6 +8,8 @@ results/
 *.ckpt
 clip-vit-large-patch14
 results
+datasets
+taming
 temp
 *.zarr
 src/
