@@ -11,5 +11,6 @@ results
 datasets
 taming
 temp
+*.ipynb_checkpoints*
 *.zarr
 src/

@@ -1,7 +1,7 @@
 PROJ_ROOT="results/"                      # root directory for saving experiment logs
-EXPNAME="pusht_short"          # experiment name 
+EXPNAME="pusht_short_debug"          # experiment name 
 DATADIR="datasets/push_t"    # dataset directory
-AEPATH="results/pusht_ae_64/checkpoints/last_summoning.ckpt"    # pretrained video autoencoder checkpoint
+AEPATH="/home/ubuntu/Robot/LVDM/results/pusht_ae_64/checkpoints/epoch=0004-step=056399.ckpt"    # pretrained video autoencoder checkpoint
 
 CONFIG="configs/pusht/short.yaml"
 # OR CONFIG="configs/videoae/ucf.yaml"

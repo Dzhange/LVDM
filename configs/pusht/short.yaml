@@ -10,7 +10,7 @@ model:
     loss_type: l1
     first_stage_key: image
     cond_stage_key: "image"
-    image_size: 32
+    image_size: 8
     video_length: 4
     channels: 4
     monitor: val/loss_simple_ema
@@ -25,7 +25,7 @@ model:
     unet_config:
       target: lvdm.models.modules.openaimodel3d.UNetModel
       params:
-        image_size: 32
+        image_size: 8
         in_channels: 4
         out_channels: 4
         model_channels: 256
@@ -108,7 +108,7 @@ lightning:
     image_logger:
       target: lvdm.utils.callbacks.ImageLogger
       params:
-        batch_frequency: 1000
+        batch_frequency: 1500
         max_images: 8
         increase_log_steps: False
     metrics_over_trainsteps_checkpoint:

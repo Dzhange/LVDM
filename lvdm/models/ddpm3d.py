@@ -98,7 +98,11 @@ class DDPM(pl.LightningModule):
         self.n_classes = n_classes
         
         self.temporal_length = video_length if video_length is not None else unet_config.params.temporal_length
+        self.video_length = self.temporal_length
+        self.total_length = self.temporal_length
+        self.resume_new_epoch = 0
         count_params(self.model, verbose=True)
+
         self.use_ema = use_ema
         if self.use_ema:
             self.model_ema = LitEma(self.model)
@@ -618,6 +622,10 @@ class LatentDiffusion(DDPM):
                     xc = batch[cond_key]
                 elif cond_key == 'class_label':
                     xc = batch
+                elif cond_key == 'first_frame':
+                    first_frame = batch[cond_key]
+                    first_frame = first_frame.unsqueeze(2)
+                    xc = first_frame.repeat(1, 1, x.shape[2], 1, 1)
                 else:
                     raise NotImplementedError
             else:
@@ -666,7 +674,7 @@ class LatentDiffusion(DDPM):
         if self.latent_frame_strde:
             z = z[:, :, ::4, :, :]
             assert(z.shape[2] == self.temporal_length), f'z={z.shape}, self.temporal_length={self.temporal_length}'
-        
+        # from IPython import embed; embed()
         c, xc = self.get_condition(batch, x, bs, force_c_encode, k, cond_key)
         out = [z, c]
         
@@ -1130,7 +1138,7 @@ class LatentDiffusion(DDPM):
                 except:
                     xc = log_txt_as_img(txt_img_shape, batch["class_name"], size=x.shape[3]//25)
                 log['conditioning'] = xc
-            elif isimage(xc):
+            elif isimagtmue(xc):
                 log["conditioning"] = xc
             if ismap(xc):
                 log["original_conditioning"] = self.to_rgb(xc)
@@ -1184,6 +1192,7 @@ class LatentDiffusion(DDPM):
                                                          unconditional_conditioning=uc, **kwargs,
                                                          )
             x_samples = self.decode_first_stage(samples)
+            # from IPython import embed; embed()
             log["samples"] = x_samples
         return log
 

@@ -33,7 +33,8 @@ class PushTVideoDataset:
             clip_step=1,
             seed=42,
             val_ratio=0.0,
-            max_train_episodes=None
+            max_train_episodes=None,
+            include_first_frame=False  # New flag
             ):
         
         super().__init__()
@@ -42,6 +43,7 @@ class PushTVideoDataset:
         self.subset_split = subset_split
         self.spatial_transform = spatial_transform
         self.clip_step = clip_step
+        self.include_first_frame = include_first_frame  # Store the flag
         
         # Load data
         zarr_path = Path(data_root) / 'pusht_cchi_v7_replay.zarr'
@@ -141,8 +143,14 @@ class PushTVideoDataset:
 
         example = dict()
         example["image"] = torch_data['obs']['image'].permute(1, 0, 2, 3)
-        # example["agent_pos"] = torch_data['obs']['image']
         example["frame_stride"] = self.clip_step
+        example["action"] = torch_data["action"]
+
+        # Add the first frame if the flag is set
+        if self.include_first_frame:
+            first_frame = torch_data['obs']['image'][0]  # Extract the first frame (3, H, W)
+            example["first_frame"] = first_frame
+
         return example
 
 
