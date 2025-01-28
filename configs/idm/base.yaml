@@ -1,0 +1,21 @@
+# Example: config.yaml
+dataset:
+  data_root: "datasets/push_t"
+  resolution: 96
+  video_length: 16
+  subset_split: "test"
+  spatial_transform: "center_crop_resize"
+  clip_step: 1
+
+model:
+  action_dim: 2  # For 2D actions, e.g., [dx, dy]
+
+train:
+  device: "cuda"
+  batch_size: 4
+  lr: 0.0001
+  epochs: 2
+  loss_type: "MSE"
+  log_steps: 10
+  num_workers: 2
+  result_dir: "results"  # all checkpoints & viz images will go here
