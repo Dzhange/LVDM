@@ -22,6 +22,10 @@ from lvdm.samplers.ddim import DDIMSampler
 from lvdm.utils.common_utils import exists, default, ismap, isimage, mean_flat, count_params, instantiate_from_config, check_istarget
 from lvdm.utils.saving_utils import log_txt_as_img
 
+import traceback
+from IPython import embed
+
+
 def disabled_train(self, mode=True):
     """Overwrite model.train with this function to make sure train/eval mode
     does not change anymore."""
@@ -599,6 +603,8 @@ class LatentDiffusion(DDPM):
     def get_learned_conditioning(self, c):
         if self.cond_stage_forward is None:
             if hasattr(self.cond_stage_model, 'encode') and callable(self.cond_stage_model.encode):
+                # print("get learned")
+                # embed()
                 c = self.cond_stage_model.encode(c)
                 if isinstance(c, DiagonalGaussianDistribution):
                     c = c.mode()

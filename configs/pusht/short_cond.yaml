@@ -113,7 +113,7 @@ lightning:
     image_logger:
       target: lvdm.utils.callbacks.ImageLogger
       params:
-        batch_frequency: 1500
+        batch_frequency: 15
         max_images: 8
         increase_log_steps: False
     metrics_over_trainsteps_checkpoint:

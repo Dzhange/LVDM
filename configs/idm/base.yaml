@@ -1,7 +1,7 @@
 # Example: config.yaml
 dataset:
   data_root: "datasets/push_t"
-  resolution: 96
+  resolution: 64
   video_length: 16
   subset_split: "test"
   spatial_transform: "center_crop_resize"
@@ -14,8 +14,8 @@ train:
   device: "cuda"
   batch_size: 4
   lr: 0.0001
-  epochs: 2
+  epochs: 25
   loss_type: "MSE"
-  log_steps: 10
-  num_workers: 2
-  result_dir: "results"  # all checkpoints & viz images will go here
+  log_steps: 100
+  num_workers: 8
+  result_dir: "results_idm/res_64"  # all checkpoints & viz images will go here

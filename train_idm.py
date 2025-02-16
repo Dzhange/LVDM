@@ -85,7 +85,7 @@ def train_inverse_dynamics(config):
     Includes:
      - Logging
      - Visualization of predicted vs. GT actions
-     - Checkpoint saving on keyboard interrupt
+     - Checkpoint saving on keyboard interrupt and at the end of each epoch
     """
     # 0) Setup logging
     logger = logging.getLogger(__name__)
@@ -195,6 +195,11 @@ def train_inverse_dynamics(config):
 
             epoch_avg_loss = epoch_loss / max(step_count, 1)
             logger.info(f"==> [Epoch {epoch}/{epochs}] Avg Loss: {epoch_avg_loss:.4f}")
+
+            # Save checkpoint at the end of the epoch
+            epoch_ckpt_path = os.path.join(result_dir, f"inverse_dynamics_epoch_{epoch}_step_{global_step}.pt")
+            torch.save(model.state_dict(), epoch_ckpt_path)
+            logger.info(f"Checkpoint for epoch {epoch} saved to: {epoch_ckpt_path}")
 
         # Finished all epochs: save final checkpoint
         final_ckpt_path = os.path.join(result_dir, f"inverse_dynamics_step_{global_step}.pt")
