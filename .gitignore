@@ -14,3 +14,4 @@ temp
 *.ipynb_checkpoints*
 *.zarr
 src/
+results_idm
